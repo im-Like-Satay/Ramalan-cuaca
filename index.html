@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuaca Wilayah Prigi</title>
+  </head>
+  <body>
+    
+    <main>
+      <h1>Weather of Prigi | v1.0 ujicoba</h1>
+      <p>Prigi weather forecast application</p>
+      <hr />
+      <em>Data diambil dari BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</em>
+    </main>
+    
+    <div id="result">
+      
+    </div>
+    
+    <script>
+      
+      
+      async function getWeather() {
+        const req = await fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=35.03.08.2011")
+        const weather = await req.json()
+        const dataCuaca = weather.data[0].cuaca
+
+        const main = document.main
+        const result = document.getElementById("result")
+        const hasil = dataCuaca.flat(2).map(item => ({
+          suhu: item.t,
+          kelembaban: item.hu,
+          deskripsi_cuaca: item.weather_desc,
+          arah_angin: item.wd,
+          tanggal_waktu: item.local_datetime
+        }))
+        /*
+        result.innerHTML = 
+        `<ul>
+          <li>Suhu : ${hasil.suhu}</li>
+          <li>Kelembaban : ${hasil.kelembaban}</li>
+          <li>Deskripsi Cuaca : ${hasil.deskripsi_cuaca}</li>
+          <li>Arah Angin : ${hasil.arah_angin}</li>
+          <li>Tanggal Dan Waktu : ${hasil.tanggal_waktu}</li>
+        </ul>`
+        */
+        hasil.forEach(item => {
+          result.innerHTML += `
+            <li>
+              <strong>${item.tanggal_waktu}</strong> - ${item.deskripsi_cuaca}
+              <ul>
+                <li>Suhu: ${item.suhu}°C</li>
+                <li>Kelembaban: ${item.kelembaban}%</li>
+                <li>Arah Angin: ${item.arah_angin}</li>
+              </ul>
+            </li>
+          `;
+        });
+
+        console.table(hasil)
+        return;
+      }
+      
+      getWeather()
+    </script>
+  </body>
+</html>
