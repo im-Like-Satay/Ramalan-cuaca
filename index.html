@@ -16,17 +16,14 @@
         </div>
         
         <div class="p-6">
-          <hr class="my-4 border-gray-200" />
           <em class="text-gray-600 text-sm">Data diambil dari BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</em>
-          
           <div id="result" class="mt-6 space-y-4"></div>
         </div>
         
-        <!-- Footer with BMKG logo -->
         <footer class="mt-6 pt-4 border-t border-gray-200 flex items-center justify-center">
           <div class="text-center">
             <p class="text-gray-600 text-sm mb-2">Sumber Data:</p>
-            <img src="1.png" alt="Logo BMKG" class="h-13 mx-auto">
+            <img src="" alt="Logo BMKG" class="h-13 mx-auto">
           </div>
         </footer>
       </main>
@@ -34,53 +31,56 @@
     
     <script>
       async function getWeather() {
-        const req = await fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=35.03.08.2011")
-        const weather = await req.json()
-        const dataCuaca = weather.data[0].cuaca
-
-        const main = document.main
-        const result = document.getElementById("result")
-        const hasil = dataCuaca.flat(2).map(item => ({
-          suhu: item.t,
-          kelembaban: item.hu,
-          deskripsi_cuaca: item.weather_desc,
-          arah_angin: item.wd,
-          tanggal_waktu: item.local_datetime
-        }))
-        
-        hasil.forEach(item => {
-          result.innerHTML += `
-            <div class="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between">
-                <strong class="text-lg text-blue-600">${item.tanggal_waktu}</strong>
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                  ${item.deskripsi_cuaca}
-                </span>
+        try {
+          const req = await fetch("https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=35.03.08.2011")
+          const weather = await req.json()
+          const dataCuaca = weather.data[0].cuaca
+          
+          const main = document.main
+          const result = document.getElementById("result")
+          const hasil = dataCuaca.flat(2).map(item => ({
+            suhu: item.t,
+            kelembaban: item.hu,
+            deskripsi_cuaca: item.weather_desc,
+            arah_angin: item.wd,
+            tanggal_waktu: item.local_datetime
+          }))
+          
+          hasil.forEach(item => {
+            result.innerHTML += `
+              <div class="bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between">
+                  <strong class="text-lg text-blue-600">${item.tanggal_waktu}</strong>
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    ${item.deskripsi_cuaca}
+                  </span>
+                </div>
+                <ul class="mt-3 space-y-2">
+                  <li class="flex items-center">
+                    <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Suhu: <span class="font-semibold ml-1">${item.suhu}°C</span>
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                    </svg>
+                    Kelembaban: <span class="font-semibold ml-1">${item.kelembaban}%</span>
+                  </li>
+                  <li class="flex items-center">
+                    <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Arah Angin: <span class="font-semibold ml-1">${item.arah_angin}</span>
+                  </li>
+                </ul>
               </div>
-              <ul class="mt-3 space-y-2">
-                <li class="flex items-center">
-                  <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                  </svg>
-                  Suhu: <span class="font-semibold ml-1">${item.suhu}°C</span>
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
-                  </svg>
-                  Kelembaban: <span class="font-semibold ml-1">${item.kelembaban}%</span>
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                  </svg>
-                  Arah Angin: <span class="font-semibold ml-1">${item.arah_angin}</span>
-                </li>
-              </ul>
-            </div>
-          `;
-        });
-        return;
+            `
+          })
+        } catch (error) {
+          result.innerHTML = "<h1>GAGAL MEMUAT DATA...</h1>"
+        }
       }
       
       getWeather()
